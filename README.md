@@ -4,24 +4,23 @@
   \__ \/  |/ // /  / / / /   / /_/ /
  ___/ / /|  // /  / / / /___/ __  /
 /____/_/ |_/___/ /_/  \____/_/ /_/
-                                v2
 ```
 
-A security audit plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Codex CLI](https://github.com/openai/codex), [OpenCode](https://github.com/opencode-ai/opencode), [Antigravity](https://github.com/neplextech/antigravity), and [Cursor](https://www.cursor.com/).
+Evidence-based security auditing for AI coding assistants. Zero false positives.
+
+Compatible with [Claude Code](https://docs.anthropic.com/en/docs/claude-code) · [Gemini CLI](https://github.com/google-gemini/gemini-cli) · [Codex CLI](https://github.com/openai/codex) · [OpenCode](https://github.com/opencode-ai/opencode) · [Antigravity](https://github.com/neplextech/antigravity) · [Cursor](https://www.cursor.com/)
 
 ---
 
-I tell ya, security scanners get no respect. No respect at all. You run one on your codebase and it comes back with 500 findings. Five hundred! I haven't read 500 of anything in my life. My doctor sends me one page of test results and I need a nap.
+## Why Snitch
 
-And the findings? Half of them are `YOUR_API_KEY_HERE` in a comment somebody wrote two years ago. The scanner sees the word "key" and loses its mind. It's like a smoke detector that goes off every time you make toast. After a while you just take the batteries out. Now your house burns down. Great system.
+Traditional scanners flood you with hundreds of findings — half of them are `YOUR_API_KEY_HERE` in a comment. Snitch is different: every finding must be backed by real code evidence. No file read? No finding. Can't quote the exact line? No finding. Didn't check for a fix nearby? No finding.
 
-Here's the thing though — that was fine when humans wrote all the code. You knew what was in there because you put it there. But now? Your AI wrote 80% of the app in three weeks. You didn't read most of it. I didn't read most of it. Nobody read most of it. We just watched it go and said "looks good" like we were approving a restaurant check we didn't look at.
+Findings are tagged with **CWE**, **OWASP Top 10:2025**, and **CVSS 4.0** references for direct GRC ingestion.
 
-Snitch is different. It makes your AI actually *prove* every finding with real code from your actual project. No file read? No finding. Can't quote the exact line? No finding. Didn't check if there's a fix two lines above? No finding. It's like a cop that needs a warrant. Remember those?
+---
 
-The result is a report where everything in it is real. Your AI builds the app, Snitch reviews the app, you ship it without waking up at 3am wondering if your users' passwords are in a log file somewhere. They might be. But at least now you'll know.
-
-## Install
+## Installation
 
 ### Claude Code
 
@@ -29,8 +28,6 @@ The result is a report where everything in it is real. Your AI builds the app, S
 /plugin marketplace add JF10R/Snitch
 /plugin install snitch@JF10R-Snitch
 ```
-
-Two commands. My last relationship took more effort than that and was way less useful.
 
 ### Gemini CLI
 
@@ -45,7 +42,7 @@ git clone https://github.com/JF10R/Snitch.git
 cp -r Snitch/agents/skills/snitch ~/.codex/skills/snitch
 ```
 
-That's a global install. If you want it for just one project, use `.agents/skills/snitch` instead.
+Per-project: use `.agents/skills/snitch` instead.
 
 ### OpenCode
 
@@ -54,7 +51,7 @@ git clone https://github.com/JF10R/Snitch.git
 cp -r Snitch/skills/snitch ~/.config/opencode/skills/snitch
 ```
 
-Single project: `.opencode/skills/snitch`.
+Per-project: `.opencode/skills/snitch`
 
 ### Antigravity
 
@@ -63,7 +60,7 @@ git clone https://github.com/JF10R/Snitch.git
 cp -r Snitch/skills/snitch ~/.gemini/antigravity/skills/snitch
 ```
 
-Single project: `.agent/skills/snitch`.
+Per-project: `.agent/skills/snitch`
 
 ### Cursor
 
@@ -72,46 +69,21 @@ git clone https://github.com/JF10R/Snitch.git
 cp -r Snitch/skills/snitch .cursor/skills/snitch
 ```
 
-Project-level only.
-
----
-
 <details>
 <summary>Updating / Uninstalling</summary>
 
-**Claude Code:**
-```
-/plugin marketplace update JF10R-Snitch
-/plugin uninstall snitch@JF10R-Snitch
-```
-
-**Gemini CLI:**
-```bash
-gemini extensions update snitch
-gemini extensions uninstall snitch
-```
-
-**Codex CLI:**
-```bash
-rm -rf ~/.codex/skills/snitch
-```
-
-**OpenCode:**
-```bash
-rm -rf ~/.config/opencode/skills/snitch
-```
-
-**Antigravity:**
-```bash
-rm -rf ~/.gemini/antigravity/skills/snitch
-```
-
-**Cursor:**
-```bash
-rm -rf .cursor/skills/snitch
-```
+| Platform | Update | Uninstall |
+|----------|--------|-----------|
+| Claude Code | `/plugin marketplace update JF10R-Snitch` | `/plugin uninstall snitch@JF10R-Snitch` |
+| Gemini CLI | `gemini extensions update snitch` | `gemini extensions uninstall snitch` |
+| Codex CLI | Re-clone and copy | `rm -rf ~/.codex/skills/snitch` |
+| OpenCode | Re-clone and copy | `rm -rf ~/.config/opencode/skills/snitch` |
+| Antigravity | Re-clone and copy | `rm -rf ~/.gemini/antigravity/skills/snitch` |
+| Cursor | Re-clone and copy | `rm -rf .cursor/skills/snitch` |
 
 </details>
+
+---
 
 ## Usage
 
@@ -119,66 +91,112 @@ rm -rf .cursor/skills/snitch
 /snitch
 ```
 
-That's it. You get a menu. Pick what you want to check. It's like a deli counter but instead of cold cuts you're picking which parts of your app might be leaking customer data.
-
-**Quick Scan** is the move. It reads your `package.json`, figures out you're using Prisma and Stripe and NextAuth, and only checks the stuff that matters. It's not going to audit your Twilio setup if you don't have a phone number anywhere in the project. Smart like that.
-
-You can also skip the menu entirely:
+Select categories from the interactive menu, or run directly:
 
 ```
 /snitch --categories=1,2,3,13
 /snitch --diff
 ```
 
-`--diff` is the one you want before every commit. Takes 30 seconds, catches the stuff that sneaks in when you're shipping fast and not paying attention. Which is always.
+**Quick Scan** detects your stack automatically (`package.json`, imports, config files) and only audits relevant categories.
 
-### After the Scan
+**`--diff`** scans only staged/unstaged changes — ideal as a pre-commit check.
 
-Snitch gives you options:
+### After the scan
 
-- **Run another scan** — go back, check more stuff
-- **Fix one by one** — walk through each finding, say yes or no
-- **Fix all** — let it patch everything at once
-- **Done** — you're out
+- **Fix one by one** — walk through each finding individually
+- **Fix all** — auto-patch everything at once
+- **Run another scan** — check additional categories
+- **Done** — exit
 
-## What's New
+---
 
-**Recent additions** that make Snitch better:
+## Categories
 
-- **Category 40: Tunnels & DNS** — ngrok tokens, cloudflared credentials, dev tunnels in production. If you're using tunneling tools and forgot to clean up credentials, we catch it now.
-- **Session & Token Lifetime Checks** — Tokens that don't expire, logout that doesn't actually log you out, session confusion. We check if your auth actually works the way you think it does.
-- **Expanded AI API Coverage (Category 15)** — More patterns for catching API keys from Claude, GPT, Gemini, and other AI services scattered through your codebase.
+40 audit categories organized by domain:
 
-Check back regularly. We add new categories when we find new patterns that matter.
+### Application Security
 
-## What It Checks
+| # | Category | Description |
+|---|----------|-------------|
+| 01 | SQL Injection | Parameterized queries, ORM misuse |
+| 02 | XSS | Output encoding, DOM injection |
+| 03 | Hardcoded Secrets | API keys, passwords, tokens in source |
+| 04 | Authentication | Login flows, password handling, MFA |
+| 05 | SSRF | Server-side request forgery |
+| 07 | Rate Limiting | Brute-force protection, throttling |
+| 08 | CORS | Cross-origin misconfiguration |
+| 09 | Cryptography | Weak algorithms, key management |
+| 10 | Dangerous Patterns | `eval()`, dynamic code execution |
+| 28 | Authorization | Broken access control, IDOR |
+| 29 | File Uploads | Validation, path traversal |
+| 30 | Input Validation | ReDoS, injection vectors |
+| 32 | Security Headers | CSP, HSTS, X-Frame-Options |
+| 39 | Token Lifetimes | Session expiry, logout effectiveness |
 
-40 categories. That's not a typo. Let me break it down so it doesn't sound like a college syllabus.
+### Services & Integrations
 
-**The Scary Stuff** — SQL injection (someone runs database commands through your app), XSS (someone puts a script on your page that steals cookies), hardcoded secrets (your API keys are just... sitting there in the code), broken login flows, your server fetching URLs it shouldn't, and nobody put rate limits on anything so bots can try a million passwords.
+| # | Category | Description |
+|---|----------|-------------|
+| 06 | Supabase | Row-level security, exposed service keys |
+| 13 | Stripe | API keys, webhook verification |
+| 14 | Auth Providers | Clerk, Auth0, NextAuth configuration |
+| 15 | AI APIs | Claude, OpenAI, Gemini key exposure |
+| 16 | Email | SMTP credentials, spam abuse vectors |
+| 17 | Database | Connection strings, query security |
+| 18 | Redis | Authentication, exposed instances |
+| 19 | SMS | Twilio tokens, message injection |
 
-**Your Services** — Supabase row-level security (is the data actually locked down or can anyone grab it?), Stripe keys and webhooks, auth providers like Clerk and Auth0 (did you actually set them up right?), AI API keys floating around, email services that could get turned into spam cannons, database connection strings in the open, Redis passwords, Twilio tokens.
+### Infrastructure
 
-**Session & Token Lifetimes** — This is the new one. Your login tokens — do they expire? Do they expire at the right time? Does logging out actually log you out, or does it just clear a cookie while the token's still good for another six hours? You'd be surprised how many apps get this wrong.
+| # | Category | Description |
+|---|----------|-------------|
+| 11 | Cloud Providers | AWS, GCP, Azure, Vercel, Cloudflare |
+| 12 | Data Leaks | Logs, error messages, debug output |
+| 31 | CI/CD | Pipeline secrets, deployment security |
+| 40 | Tunnels & DNS | ngrok, cloudflared, DNS configuration |
 
-**Compliance** — HIPAA (patient data in your logs is a federal problem), SOC 2 (no audit trail means no audit trail), PCI-DSS (you're storing credit card numbers? in *this* economy?), GDPR (can your European users actually delete their data or is that button decorative?).
+### Compliance
 
-**Performance** — Memory leaks (event listeners that never get cleaned up), N+1 queries (your ORM is hitting the database 200 times when it could hit it once), and code that blocks the whole server while it reads a file.
+| # | Category | Description |
+|---|----------|-------------|
+| 20 | HIPAA | Protected health information |
+| 21 | SOC 2 | Audit trails, access controls |
+| 22 | PCI-DSS | Payment card data handling |
+| 23 | GDPR | Data deletion, consent, EU requirements |
+| 34 | FIPS 140-3 | Cryptographic module compliance |
+| 35 | Governance | ISO 27001, FedRAMP, CMMC |
+| 38 | Data Classification | Sensitivity labeling, handling policies |
 
-**Tunnels & DNS** — ngrok authtokens committed to git, cloudflared tunnel credentials exposed, dev tunnels shipped to production, plaintext secrets in `wrangler.toml`, `.dev.vars` tracked in version control, hardcoded DNS resolvers, missing DNS-over-HTTPS. If you're tunneling to localhost and forgot to clean it up, Snitch will find it.
+### Performance & Maintenance
 
-**The Rest** — Vulnerable npm packages, users accessing each other's data, file uploads with no validation, inputs that crash your regex engine, CI/CD pipelines with secrets in plain text, missing security headers, dead dependencies making your bundle enormous, crypto compliance, governance certifications, disaster recovery, monitoring, and data lifecycle.
+| # | Category | Description |
+|---|----------|-------------|
+| 24 | Memory Leaks | Event listeners, uncleaned resources |
+| 25 | N+1 Queries | ORM batching, query optimization |
+| 26 | Performance | Blocking I/O, CPU-bound operations |
+| 27 | Dependencies | Known CVEs, outdated packages |
+| 33 | Unused Dependencies | Dead code, bundle bloat |
+| 36 | BCDR | Backup, disaster recovery |
+| 37 | Monitoring | Observability, alerting gaps |
+
+---
 
 ## How It Works
 
-It's not some pattern-matching robot that sees the word "password" and panics. For every category, Snitch knows what to look for, what's actually dangerous versus what just looks suspicious, and what to check before sounding the alarm. Is this test code? Is there input validation right above it? Is this running on the server or could it end up in the browser?
+Snitch is a skill file (`SKILL.md`) — no runtime, no build step, no dependencies. It guides AI assistants through structured security analysis with built-in anti-hallucination rules:
 
-Every finding comes with the file, the line number, the actual code, why it's a problem, and how to fix it. Findings are tagged with CWE, OWASP Top 10:2025, and CVSS 4.0 references so your GRC tools can ingest them directly. If it can't prove it, it doesn't report it. I wish my mechanic worked like that.
+1. **Read** the actual source files before reporting
+2. **Verify** each finding with exact file path and line number
+3. **Check context** — is there a fix nearby? Is this test code? Server or client?
+4. **Prove it** — no evidence, no finding
 
-## Contributors
+---
 
-- [Jhean-François Fournier-Noël (@JF10R)](https://github.com/JF10R) — CWE, OWASP Top 10:2025, and CVSS 4.0 standards tagging on findings
+## Contributing
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
 
 ## License
 
-MIT
+[MIT](LICENSE)
