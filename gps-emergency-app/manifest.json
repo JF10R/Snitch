@@ -1,0 +1,23 @@
+{
+  "name": "GeoPin - Emergency GPS Location",
+  "short_name": "GeoPin",
+  "description": "GPS-based emergency location app. Get your precise location as a memorable 3-word code. Works offline, even deep in the woods.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e17",
+  "theme_color": "#00d4aa",
+  "categories": ["utilities", "navigation"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%230a0e17'/><circle cx='96' cy='86' r='50' fill='none' stroke='%2300d4aa' stroke-width='6'/><circle cx='96' cy='86' r='8' fill='%2300d4aa'/><line x1='96' y1='26' x2='96' y2='46' stroke='%2300d4aa' stroke-width='4'/><line x1='96' y1='126' x2='96' y2='146' stroke='%2300d4aa' stroke-width='4'/><line x1='36' y1='86' x2='56' y2='86' stroke='%2300d4aa' stroke-width='4'/><line x1='136' y1='86' x2='156' y2='86' stroke='%2300d4aa' stroke-width='4'/><text x='96' y='178' text-anchor='middle' font-family='sans-serif' font-size='20' font-weight='bold' fill='%2300d4aa'>GeoPin</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0e17'/><circle cx='256' cy='226' r='130' fill='none' stroke='%2300d4aa' stroke-width='14'/><circle cx='256' cy='226' r='20' fill='%2300d4aa'/><line x1='256' y1='66' x2='256' y2='116' stroke='%2300d4aa' stroke-width='10'/><line x1='256' y1='336' x2='256' y2='386' stroke='%2300d4aa' stroke-width='10'/><line x1='96' y1='226' x2='146' y2='226' stroke='%2300d4aa' stroke-width='10'/><line x1='366' y1='226' x2='416' y2='226' stroke='%2300d4aa' stroke-width='10'/><text x='256' y='470' text-anchor='middle' font-family='sans-serif' font-size='56' font-weight='bold' fill='%2300d4aa'>GeoPin</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
