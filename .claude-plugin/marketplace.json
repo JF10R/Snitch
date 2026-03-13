@@ -7,8 +7,8 @@
   "plugins": [
     {
       "name": "snitch",
-      "description": "Security Audit Plugin - Evidence-based security scanning with anti-hallucination rules, interactive scan selection, and performance analysis. 40 categories including HIPAA, SOC 2, PCI-DSS, GDPR compliance, FIPS 140-3, token lifetime analysis, tunnel & DNS security, CVE/0-day auditing, and unused dependency detection.",
-      "version": "5.1.0",
+      "description": "Security Audit Plugin - Evidence-based security scanning with anti-hallucination rules, interactive scan selection, and performance analysis. 47 categories including HIPAA, SOC 2, PCI-DSS, GDPR compliance, FIPS 140-3, token lifetime analysis, tunnel & DNS security, CVE/0-day auditing, unused dependency detection, session management & CSRF, error handling, and software integrity.",
+      "version": "5.2.0",
       "source": "./",
       "author": {
         "name": "JF10R"
